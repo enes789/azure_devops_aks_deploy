@@ -34,15 +34,6 @@ stages:
         Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
-    # - task: Docker@2
-    #   displayName: Push image
-    #   inputs:
-    #     containerRegistry: 'azurehandson-acr'
-    #     repository: '$(imageRepo)'
-    #     command: 'push'
-    #     tags: |
-    #       $(tag)    
-
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: '$(Pipeline.Workspace)/s/kubernetes'
@@ -80,5 +71,5 @@ stages:
           kubernetesServiceConnection: 'azure-devops-aks'
           namespace: 'default'
           manifests: |
-            '$(Pipeline.Workspace)/manifests/deployment.yml'
-            '$(Pipeline.Workspace)/manifests/service.yml'
+            '$(Build.SourcesDirectory)/kubernetes/deployment.yml'
+            '$(Build.SourcesDirectory)/kubernetes/service.yml'
