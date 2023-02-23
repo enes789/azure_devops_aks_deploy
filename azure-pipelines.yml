@@ -16,7 +16,7 @@ stages:
 #   - job: Build
 #     displayName: Build
 #     pool:
-#       name: mylocal
+#       name: azure-vm
 #       #vmImage: ubuntu-latest
 #     steps:
 #     # - script: docker build -t azurehandson.azurecr.io/azure_devops_aks_deploy:$(Build.BuildId) .
@@ -51,7 +51,7 @@ stages:
     displayName: Deploy to AKS
     environment: 'k8sdev.default'
     pool:  
-      name: mylocal
+      name: azure-vm
       #vmImage: ubuntu-latest
     strategy:
      runOnce:
@@ -80,6 +80,6 @@ stages:
               action: 'deploy'
               namespace: 'default'
               manifests: |
-                '$(Build.SourcesDirectory)\kubernetes\deployment.yml'
-                '$(Build.SourcesDirectory)\kubernetes\service.yml'
+                '$(Build.SourcesDirectory)/kubernetes/deployment.yml'
+                '$(Build.SourcesDirectory)/kubernetes/service.yml'
               containers: '$(devacrurl)/$(imageRepo):$(tag)'
