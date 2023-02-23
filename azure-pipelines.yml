@@ -34,14 +34,14 @@ stages:
         Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
-    - task: Docker@2
-      displayName: Push image
-      inputs:
-        containerRegistry: 'azurehandson-acr'
-        repository: '$(imageRepo)'
-        command: 'push'
-        tags: |
-          $(tag)    
+    # - task: Docker@2
+    #   displayName: Push image
+    #   inputs:
+    #     containerRegistry: 'azurehandson-acr'
+    #     repository: '$(imageRepo)'
+    #     command: 'push'
+    #     tags: |
+    #       $(tag)    
 
     - task: PublishPipelineArtifact@1
       inputs:
