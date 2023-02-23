@@ -1,19 +1,19 @@
 apiVersion : apps/v1
 kind: Deployment
 metadata:
-  name: sampleapp 
+  name: azure_devops_aks_deploy 
 spec:
-  replicas: #replicaNo#
+  replicas: 1
   selector:
     matchLabels:
-      app: sampleapp
+      app: azure_devops_aks_deploy
   template:
     metadata:
       labels:
-        app: sampleapp 
+        app: azure_devops_aks_deploy 
     spec:
       containers:
-        - name: sampleapp 
-          image: k8sexamplesacr.azurecr.io/sampleapp
+        - name: azure_devops_aks_deploy 
+          image: azurehandson.azurecr.io/azure_devops_aks_deploy
           ports:
           - containerPort: 80
