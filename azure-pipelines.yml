@@ -46,30 +46,34 @@ stages:
   variables:
     acrsecret: acrauth 
   jobs:
-  - job: Deploy
+  - deployment: Deploy
     displayName: Deploy to AKS
+    environment: 'k8sdev.default'
     pool:  
       name: mylocal
       #vmImage: ubuntu-latest
-    steps:
-      - task: DownloadPipelineArtifact@2
-        inputs:
-          buildType: 'current'
-          artifactName: 'manifests'
-          targetPath: '$(Pipeline.Workspace)/manifests'
-      - task: KubernetesManifest@0
-        inputs:
-          action: 'createSecret'
-          kubernetesServiceConnection: 'azure-devops-aks'
-          namespace: 'default'
-          secretType: 'dockerRegistry'
-          secretName: '$(acrsecret)'
-          dockerRegistryEndpoint: 'azurehandson-acr'
-      - task: KubernetesManifest@0
-        inputs:
-          action: 'deploy'
-          kubernetesServiceConnection: 'azure-devops-aks'
-          namespace: 'default'
-          manifests: |
-            '$(Build.SourcesDirectory)/kubernetes/deployment.yml'
-            '$(Build.SourcesDirectory)/kubernetes/service.yml'
+    strategy:
+     runOnce:
+       deploy:
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: 'manifests'
+              targetPath: '$(Pipeline.Workspace)/manifests'
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'createSecret'
+              # kubernetesServiceConnection: 'azure-devops-aks'
+              namespace: 'default'
+              secretType: 'dockerRegistry'
+              secretName: '$(acrsecret)'
+              dockerRegistryEndpoint: 'azurehandson-acr'
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'deploy'
+              # kubernetesServiceConnection: 'azure-devops-aks'
+              namespace: 'default'
+              manifests: |
+                '$(Pipeline.Workspace)/manifests/deployment.yml'
+                '$(Pipeline.Workspace)/manifests/service.yml'
