@@ -32,14 +32,20 @@ stages:
         repository: '$(imageRepo)'
         command: 'buildAndPush'
         Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
-          latest'
-    - task: PublishPipelineArtifact@1
+        # tags: |
+        #   $(tag)
+        #   latest'
+    - task: Docker@2
       inputs:
-        targetPath: '$(Pipeline.Workspace)/s/kubernetes'
-        artifact: 'manifests'
-        publishLocation: 'pipeline'
+        containerRegistry: 'azurehandson-acr'
+        repository: '$(imageRepo)'
+        command: 'push'    
+          
+    # - task: PublishPipelineArtifact@1
+    #   inputs:
+    #     targetPath: '$(Pipeline.Workspace)/s/kubernetes'
+    #     artifact: 'manifests'
+    #     publishLocation: 'pipeline'
         
 # - stage: Deploy
 #   displayName: Deploy to AKS
