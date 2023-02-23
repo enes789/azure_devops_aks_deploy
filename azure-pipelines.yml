@@ -10,35 +10,35 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
-# - stage: Build
-#   displayName: Build image
-#   jobs:
-#   - job: Build
-#     displayName: Build
-#     pool:
-#       name: azure-vm
-#       #vmImage: ubuntu-latest
-#     steps:
-#     # - script: docker build -t azurehandson.azurecr.io/azure_devops_aks_deploy:$(Build.BuildId) .
-#     #   displayName: Build an image
-#     # - script: docker login azurehandson.azurecr.io -u $(ACR_USER) -p $(ACR_PASSWORD)
-#     #   displayName: acr login 
-#     # - script: docker push azurehandson.azurecr.io/azure_devops_aks_deploy:$(Build.BuildId)
-#     #   displayName: Push image  
-#     - task: Docker@2
-#       displayName: Build an image
-#       inputs:
-#         containerRegistry: 'azurehandson-acr'
-#         repository: '$(imageRepo)'
-#         command: 'buildAndPush'
-#         Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-#         tags: |
-#           $(tag)
-#     - task: PublishPipelineArtifact@1
-#       inputs:
-#         targetPath: '$(Pipeline.Workspace)/s/kubernetes'
-#         artifact: 'manifests'
-#         publishLocation: 'pipeline'
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      name: mylocal
+      #vmImage: ubuntu-latest
+    steps:
+    # - script: docker build -t azurehandson.azurecr.io/azure_devops_aks_deploy:$(Build.BuildId) .
+    #   displayName: Build an image
+    # - script: docker login azurehandson.azurecr.io -u $(ACR_USER) -p $(ACR_PASSWORD)
+    #   displayName: acr login 
+    # - script: docker push azurehandson.azurecr.io/azure_devops_aks_deploy:$(Build.BuildId)
+    #   displayName: Push image  
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        containerRegistry: 'azurehandson-acr'
+        repository: '$(imageRepo)'
+        command: 'buildAndPush'
+        Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: |
+          $(tag)
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)/s/kubernetes'
+        artifact: 'manifests'
+        publishLocation: 'pipeline'
         
 - stage: Deploy
   displayName: Deploy to AKS
@@ -51,17 +51,17 @@ stages:
     displayName: Deploy to AKS
     environment: 'k8sdev.default'
     pool:  
-      name: azure-vm
+      name: mylocal
       #vmImage: ubuntu-latest
     strategy:
      runOnce:
        deploy:
         steps:
-          # - task: DownloadPipelineArtifact@2
-          #   inputs:
-          #     buildType: 'current'
-          #     artifactName: 'manifests'
-          #     targetPath: '$(Pipeline.Workspace)/manifests'
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: 'manifests'
+              targetPath: '$(Pipeline.Workspace)/manifests'
           - task: KubernetesManifest@0
             displayName: Create ACR secret
             inputs:
