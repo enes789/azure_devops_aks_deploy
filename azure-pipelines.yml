@@ -19,11 +19,11 @@ stages:
       name: mylocal
       #vmImage: ubuntu-latest
     steps:
-    - script: docker build -t azurehandson/azure_devops_aks_deploy .
+    - script: docker build -t azurehandson.azurecr.io/azure_devops_aks_deploy .
       displayName: Build an image
     - script: docker login azurehandson.azurecr.io -u $(ACR_USER) -p $(ACR_PASSWORD)
       displayName: acr login 
-    - script: docker push azurehandson/azure_devops_aks_deploy:latest
+    - script: docker push azurehandson.azurecr.io/azure_devops_aks_deploy:latest
       displayName: Push image  
 #     - task: Docker@2
 #       displayName: Build an image
