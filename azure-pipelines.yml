@@ -70,12 +70,14 @@ stages:
               secretType: 'dockerRegistry'
               secretName: '$(acrsecret)'
               dockerRegistryEndpoint: 'azurehandson-acr'
-          - task: KubernetesManifest@0
-            displayName: Apply manifests
-            inputs:
-              action: 'deploy'
-              # kubernetesServiceConnection: 'azure-devops-aks'
-              namespace: 'default'
-              manifests: |
-                '$(Pipeline.Workspace)/manifests/deployment.yml'
-                '$(Pipeline.Workspace)/manifests/service.yml'
+          - script: kubectl apply -f kubernetes/
+            displayName: Apply manifests     
+          # - task: KubernetesManifest@0
+          #   displayName: Apply manifests
+          #   inputs:
+          #     action: 'deploy'
+          #     # kubernetesServiceConnection: 'azure-devops-aks'
+          #     namespace: 'default'
+          #     manifests: |
+          #       '$(Pipeline.Workspace)/manifests/deployment.yml'
+          #       '$(Pipeline.Workspace)/manifests/service.yml'
