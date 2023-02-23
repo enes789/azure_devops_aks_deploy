@@ -5,8 +5,9 @@ resources:
 - repo: self
 
 variables:
-  imageRepo: azure_devops_aks_deploy
-  tag: '$(Build.BuildId)'
+  - group: acr
+  # imageRepo: azure_devops_aks_deploy
+  # tag: '$(Build.BuildId)'
 
 stages:
 - stage: Build
@@ -20,6 +21,8 @@ stages:
     steps:
     - script: docker build -t azurehandson/azure_devops_aks_deploy .
       displayName: Build an image
+    - script: docker login azurehandson.azurecr.io -u $ACR_USER -p $ACR_PASSWORD
+      displayName: acr login 
     - script: docker push azurehandson/azure_devops_aks_deploy:latest
       displayName: Push image  
 #     - task: Docker@2
