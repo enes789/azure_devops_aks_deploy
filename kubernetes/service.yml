@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: azure_devops_aks_deploy
+    name: azure-devops-aks-deploy
 spec:
     type: LoadBalancer
     ports:
     - port: 80 
     selector:
-        app: azure_devops_aks_deploy
+        app: azure-devops-aks-deploy

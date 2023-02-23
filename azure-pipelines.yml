@@ -62,6 +62,7 @@ stages:
               artifactName: 'manifests'
               targetPath: '$(Pipeline.Workspace)/manifests'
           - task: KubernetesManifest@0
+            displayName: Create ACR secret
             inputs:
               action: 'createSecret'
               # kubernetesServiceConnection: 'azure-devops-aks'
@@ -70,6 +71,7 @@ stages:
               secretName: '$(acrsecret)'
               dockerRegistryEndpoint: 'azurehandson-acr'
           - task: KubernetesManifest@0
+            displayName: Apply manifests
             inputs:
               action: 'deploy'
               # kubernetesServiceConnection: 'azure-devops-aks'
